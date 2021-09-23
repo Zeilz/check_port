@@ -3,7 +3,7 @@
   hosts: servers
   become: true
   tasks:
-    - name: install docker
+    - name: "install docker"
       apt:
         name: docker
         state: latest
@@ -11,4 +11,3 @@
       service:
         name: docker
         state: restarted
-        
