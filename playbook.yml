@@ -1,0 +1,15 @@
+---
+- name: Test task
+  hosts: servers
+  become: false
+  tasks:
+    - name: ping hosts
+      shell: ping -c 2 8.8.8.8
+    
+    - name: apt update
+      apt: 
+        name: "*"
+        state: latest
+    - name: apt upgrade
+      apt:
+        upgrade: dist
