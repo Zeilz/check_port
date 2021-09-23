@@ -25,11 +25,11 @@
           - gnupg2
           - curl
     - name: "add apt key for docker repo"
-      apt-key:
+      apt_key:
         url: https://download.docker.com/linux/debian/gpg
         state: present
     - name: "add docker repo for debian fuck debian btw"
-      apt-repository:
+      apt_repository:
         repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
         state: present
     - name: "index new repo"
