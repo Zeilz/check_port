@@ -1,15 +1,14 @@
 ---
 - name: Test task
   hosts: servers
-  become: false
+  become: true
   tasks:
-    - name: ping hosts
-      shell: ping -c 2 8.8.8.8
-    
-    - name: apt update
-      apt: 
-        name: "*"
-        state: latest
-    - name: apt upgrade
+    - name: install docker
       apt:
-        upgrade: dist
+        name: docker
+        state: latest
+        update_cache: yes
+      service:
+        name: docker
+        state: restarted
+        
