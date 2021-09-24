@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    container_name: postgresdb
+    image: postgres:latest
+    restart: always
+    env_file:
+      - project.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  web:
+    container_name: django
+    build: .
+    command: >
+      python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - project.env
+    expose:
+      - 8000
+    depends_on:
+      - db
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - 1337:80
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+
+volumes:
+  postgres-data:

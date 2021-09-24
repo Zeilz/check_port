@@ -1,15 +1,44 @@
 ---
-- name: Test task
-  hosts: servers
-  become: false
+- name: "Test task"
+  hosts: "servers"
+  become: yes
   tasks:
-    - name: ping hosts
-      shell: ping -c 2 8.8.8.8
-    
-    - name: apt update
-      apt: 
+    - name: "apt update"
+      apt:
         name: "*"
         state: latest
-    - name: apt upgrade
+        update_cache: yes
+        force_apt_get: yes
+    - name: "Install packages for add rep over https"
       apt:
-        upgrade: dist
+        name: "{{packages}}"
+        force_apt_get: yes
+        state: latest
+        update_cache: yes
+      vars:
+        packages:
+          - git
+          - apt-transport-https
+          - ca-cartificates
+          - wget
+          - software-properties-common
+          - gnupg2
+          - curl
+    - name: "add apt key for docker repo"
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+    - name: "add docker repo for debian fuck debian btw"
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+        state: present
+    - name: "index new repo"
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+    - name: "finaly install docker"
+      apt:
+        name: "docker-ce"
+        state: latest
